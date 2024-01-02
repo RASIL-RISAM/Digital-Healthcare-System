@@ -1,0 +1,310 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Boxicons -->
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<!-- My CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/doctor_dashboard.css') }}">
+
+	<title>Digital Healthcare Systems</title>
+</head>
+<body>
+
+
+	<!-- SIDEBAR -->
+	<section id="sidebar">
+		<a href="#" class="brand">
+			<i class='bx bxs-hospital'></i>
+			<span class="text">Digital Healthcare</span>
+		</a>
+		<ul class="side-menu top">
+			<li class="active">
+				<a href="{{ url_for('Doctor')}}">
+					<i class='bx bxs-dashboard' ></i>
+					<span class="text">Dashboard</span>
+				</a>
+			</li>
+			<li>
+				<a href="{{ url_for('view_appointments') }}">
+					<i class='bx bxs-calendar' ></i>
+					<span class="text">Appointments</span>
+				</a>
+			</li>
+			<li>
+				<a href="{{ url_for('view_patients') }}">
+					<i class='bx bxs-user' ></i>
+					<span class="text">Patients</span>
+				</a>
+			</li>
+			<li>
+				<a href="{{url_for('Logout')}}" class="logout">
+					<i class='bx bxs-log-out-circle' ></i>
+					<span class="text">Logout</span>
+				</a>
+			</li>
+		</ul>
+	</section>
+	<!-- SIDEBAR -->
+
+
+
+	<!-- CONTENT -->
+	<section id="content">
+		<!-- NAVBAR -->
+		<nav>
+			<i class='bx bx-menu' ></i>
+			<a href="#" class="nav-link">Categories</a>
+			<form action="#">
+				<div class="form-input">
+					<input type="search" placeholder="Search...">
+					<button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
+				</div>
+			</form>
+			<input type="checkbox" id="switch-mode" hidden>
+			<label for="switch-mode" class="switch-mode"></label>
+			<a href="#" class="notification">
+				<i class='bx bxs-bell' ></i>
+				<span class="num">8</span>
+			</a>
+			<a href="#" class="profile">
+				<img src="img/doctor.png">
+			</a>
+		</nav>
+		<!-- NAVBAR -->
+
+		<!-- MAIN -->
+		<main>
+			<div class="head-title">
+				<div class="left">
+					<h1>Dotor Dashboard</h1>
+					<ul class="breadcrumb">
+						<li>
+							<a href="#">Dashboard</a>
+						</li>
+						<li><i class='bx bx-chevron-right' ></i></li>
+						<li>
+							<a class="active" href="#">Home</a>
+						</li>
+					</ul>
+				</div>
+				<button id="openDateModal" class="btn-download">
+					<i class='bx bxs-cloud-download' ></i>
+					<span class="text">Download Reports</span>
+				</button>
+			</div>
+		
+			<!-- Create a modal for the date input field -->
+			<div id="dateModal" class="modal"  style="display: none;">
+				<div class="modal-content">
+					<span class="close" id="closeDateModal">&times;</span>
+					<h2>Select Date</h2>
+					<form action="{{ url_for('download_reports') }}" method="GET">
+						<input type="date" name="date" required>
+						<button type="submit">Download</button>
+					</form>
+				</div>
+			</div>
+
+			</div>
+
+			<ul class="box-info">
+				<li>
+					<i class='bx bxs-calendar-check' ></i>
+					<span class="text">
+						<h3>125</h3>
+						<p>Appointments Today</p>
+					</span>
+				</li>
+
+			</ul>
+
+
+			<div class="table-data">
+				<div class="order">
+					<div class="head">
+						<h3>Recent Appointments</h3>
+						<i class='bx bx-search' ></i>
+						<i class='bx bx-filter' ></i>
+					</div>
+					<table>
+						<thead>
+							<tr>
+								<th>Patient</th>
+								<th>Email</th>
+								<th>Phone Number</th>
+								<th>Health Issue</th>
+								<th>Date & Time</th>
+								<th>Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for appointment in appointments %}
+								<tr>
+									<td>{{ appointment.patient_name }}</td>
+									<td>{{ appointment.patient_email }}</td>
+									<td>{{appointment.phone_number}}</td>
+									<td>{{appointment.health_issue}}</td>
+									<td>{{ appointment.appointment_datetime }}</td>
+									<td>
+										{% if appointment.status == 'Pending' %}
+										<span style="color: red;" class="status" data-appointment-id="{{ appointment.id }}">Pending</span>
+										<button class="pending-button" data-appointment-id="{{ appointment.id }}" data-patient-email="{{ appointment.patient_email }}" data-prescription-sent="{{ appointment.status == 'Completed' }}">Prescribe</button>
+										{% else %}
+										<span style="color: green;">Completed</span>
+										{% endif %}
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+					<div id="prescriptionModal" class="modal" style="display: none;">
+						<div class="modal-content">
+							<span class="close" id="closePrescriptionModal">&times;</span>
+							<h2>Prescribe Medication</h2>
+							<form id="prescription-form">
+								<input type="hidden" id="patientEmail" name="patientEmail" required>
+								<div id="prescription-entries">
+									<!-- Initial input fields for medication -->
+									<div class="medication-entry">
+										<input type="text" name="tablet[]" placeholder="Tablet" required>
+										<input type="text" name="dosage[]" placeholder="Dosage" required>
+										<input type="number" name="days[]" placeholder="Days" required>
+									</div>
+								</div>
+								<button type="button" id="add-medication">Add Medicine</button>
+								<input type="submit" value="Send Prescription">
+							</form>
+						</div>
+					</div>
+					
+						
+					
+				</div>
+			</div>
+		</main>
+	</section>
+	<script src="{{ url_for('static', filename='js/admin_dashboard.js') }}"></script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+		const openDateModalButton = document.getElementById('openDateModal');
+		const dateModal = document.getElementById('dateModal');
+		const closeDateModalButton = document.getElementById('closeDateModal');
+	
+		openDateModalButton.addEventListener('click', () => {
+			dateModal.style.display = 'block';
+		});
+	
+		closeDateModalButton.addEventListener('click', () => {
+			dateModal.style.display = 'none';
+		});
+
+	const pendingButtons = document.querySelectorAll(".pending-button");
+    const prescriptionForm = document.getElementById("prescription-form");
+    const prescriptionEntries = document.getElementById("prescription-entries");
+    const addMedicationButton = document.getElementById("add-medication");
+	const closePrescriptionModalButton = document.getElementById('closePrescriptionModal');
+    
+	let currentAppointmentId;
+	pendingButtons.forEach((button) => {
+		button.addEventListener("click", function () {
+			const appointmentId = button.getAttribute("data-appointment-id");
+			const patientEmail = button.getAttribute("data-patient-email");
+			const isPrescriptionSent = button.getAttribute("data-prescription-sent");
+
+            if (isPrescriptionSent === "true") {
+                // Prescription already sent, disable the button
+                button.disabled = true;
+            } else {
+                // Prescription not sent, allow interaction
+                showPrescriptionModal(appointmentId, patientEmail);
+            }
+
+			showPrescriptionModal(appointmentId, patientEmail);
+		});
+	});
+
+	function showPrescriptionModal(appointmentId, patientEmail) {
+		prescriptionModal.style.display = "block";
+		currentAppointmentId = appointmentId; // Set the currentAppointmentId to the selected appointment
+		document.getElementById("patientEmail").value = patientEmail;
+	}
+
+
+    addMedicationButton.addEventListener("click", () => {
+        const medicationEntry = document.querySelector(".medication-entry");
+        const newMedicationEntry = medicationEntry.cloneNode(true);
+
+        // Clear the values in the new input fields
+        newMedicationEntry.querySelectorAll("input").forEach((input) => {
+            input.value = "";
+        });
+
+        prescriptionEntries.appendChild(newMedicationEntry);
+    });
+
+	closePrescriptionModalButton.addEventListener('click', () => {
+        prescriptionModal.style.display = 'none';
+    });
+
+    // Handle prescription form submission
+	prescriptionForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    const patientEmail = document.getElementById("patientEmail").value; // Get the patient's email
+    const tablets = document.querySelectorAll('input[name="tablet[]"]');
+    const dosages = document.querySelectorAll('input[name="dosage[]"]');
+    const days = document.querySelectorAll('input[name="days[]"]');
+    const prescriptionDetails = [];
+
+    for (let i = 0; i < tablets.length; i++) {
+        const tablet = tablets[i].value;
+        const dosage = dosages[i].value;
+        const day = days[i].value;
+        prescriptionDetails.push(`${tablet} - Dosage: ${dosage}, Days: ${day}`);
+    }
+
+    // Send prescription details via AJAX to the server
+    fetch("/send_prescription", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            appointmentId: currentAppointmentId,
+            prescriptionDetails: prescriptionDetails,
+            patientEmail: patientEmail, // Include patient's email
+        }),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        if (data.message) {
+            // Update the status in the table
+            const statusElement = document.querySelector(
+                `.status[data-appointment-id="${currentAppointmentId}"]`
+            );
+            statusElement.style.color = "green";
+            statusElement.textContent = "Completed"; // Update the status to "Completed"
+            const prescribeButton = document.querySelector(
+                `.pending-button[data-appointment-id="${currentAppointmentId}"]`
+            );
+            prescribeButton.disabled = true;
+            prescriptionModal.style.display = "none"; // Close the prescription modal
+        } else if (data.error) {
+            // Handle the error, e.g., display an error message
+            console.error(data.error);
+        }
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+    });
+});
+
+});
+
+		
+	</script>
+</body>
+</html>

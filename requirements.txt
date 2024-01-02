@@ -1,0 +1,4 @@
+pip install flask
+pip install flask_SQLAlchemy
+pip install flask_migrate
+pip install mysql-connector-python

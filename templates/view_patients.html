@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Boxicons -->
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<!-- My CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/doctor_dashboard.css') }}">
+
+	<title>Digital Healthcare Systems</title>
+</head>
+<body>
+
+
+	<!-- SIDEBAR -->
+	<section id="sidebar">
+		<a href="#" class="brand">
+			<i class='bx bxs-hospital'></i>
+			<span class="text">Digital Healthcare</span>
+		</a>
+		<ul class="side-menu top">
+			<li >
+				<a href="{{ url_for('Doctor')}}">
+					<i class='bx bxs-dashboard' ></i>
+					<span class="text">Dashboard</span>
+				</a>
+			</li>
+			<li >
+				<a href="{{ url_for('view_appointments') }}">
+					<i class='bx bxs-calendar' ></i>
+					<span class="text">Appointments</span>
+				</a>
+			</li>
+			<li class="active">
+				<a href="{{ url_for('view_patients') }}">
+					<i class='bx bxs-user' ></i>
+					<span class="text">Patients</span>
+				</a>
+			</li>
+			<li>
+				<a href="{{url_for('Logout')}}" class="logout">
+					<i class='bx bxs-log-out-circle' ></i>
+					<span class="text">Logout</span>
+				</a>
+			</li>
+		</ul>
+	</section>
+	<!-- SIDEBAR -->
+
+
+
+	<!-- CONTENT -->
+	<section id="content">
+		<!-- NAVBAR -->
+		<nav>
+			<i class='bx bx-menu' ></i>
+			<a href="#" class="nav-link">Categories</a>
+			<form action="#">
+				<div class="form-input">
+					<input type="search" placeholder="Search...">
+					<button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
+				</div>
+			</form>
+			<input type="checkbox" id="switch-mode" hidden>
+			<label for="switch-mode" class="switch-mode"></label>
+			<a href="#" class="notification">
+				<i class='bx bxs-bell' ></i>
+				<span class="num">8</span>
+			</a>
+			<a href="#" class="profile">
+				<img src="img/doctor.png">
+			</a>
+		</nav>
+		<!-- NAVBAR -->
+
+		<!-- MAIN -->
+		<main>
+			<div class="head-title">
+				<div class="left">
+					<h1>Dotor Dashboard</h1>
+					<ul class="breadcrumb">
+						<li>
+							<a href="#">Dashboard</a>
+						</li>
+						<li><i class='bx bx-chevron-right' ></i></li>
+						<li>
+							<a class="active" href="#">Patients</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		
+
+
+			</div>
+
+			<div class="table-data">
+				<div class="order">
+					<div class="head">
+						<h3> Patients</h3>
+						<i class='bx bx-search' ></i>
+						<i class='bx bx-filter' ></i>
+					</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Patient Name</th>
+								<th>Patient Mail</th>
+								<th>Patien Mobile</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for patient in patients %}
+                            <tr>
+                                <td>{{ patient[0] }}</td>
+								<td>{{ patient[1] }}</td>
+								<td>{{patient[2]}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+				</div>
+			</div>
+		</main>
+	</section>
+	<script src="{{ url_for('static', filename='js/admin_dashboard.js') }}"></script>
+	<script>
+		// JavaScript to show/hide the date input field modal
+		const openDateModalButton = document.getElementById('openDateModal');
+		const dateModal = document.getElementById('dateModal');
+		const closeDateModalButton = document.getElementById('closeDateModal');
+	
+		openDateModalButton.addEventListener('click', () => {
+			dateModal.style.display = 'block';
+		});
+	
+		closeDateModalButton.addEventListener('click', () => {
+			dateModal.style.display = 'none';
+		});
+	</script>
+</body>
+</html>

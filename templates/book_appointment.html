@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Boxicons -->
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<style>
+		/* Add custom styles if needed */
+		body {
+			background-color: #f8f9fa;
+		}
+
+		.sidebar {
+			background-color: #fff;
+		}
+
+		.nav-heading {
+			color: #333;
+		}
+
+		.navbar {
+			background-color: #fff;
+		}
+	</style>
+	<!-- My CSS -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='styles/doctor_dashboard.css') }}">
+
+	<title>Digital Healthcare Systems</title>
+</head>
+<body>
+
+
+	<!-- SIDEBAR -->
+	<section id="sidebar">
+		<a href="#" class="brand">
+			<i class='bx bxs-hospital'></i>
+			<span class="text">Digital Healthcare</span>
+		</a>
+		<ul class="side-menu top">
+			<li class="active">
+				<a href="{{ url_for('Patient')}}">
+					<i class='bx bxs-dashboard' ></i>
+					<span class="text">Dashboard</span>
+				</a>
+			</li>
+			<li >
+				<a href="{{ url_for('display_appointments') }}">
+					<i class='bx bxs-calendar' ></i>
+					<span class="text">Appointments</span>
+				</a>
+			</li>
+			<li >
+				<a href="{{ url_for('view_doctors') }}">
+					<i class='bx bxs-user' ></i>
+					<span class="text">Doctors</span>
+				</a>
+			</li>
+			<li>
+				<a href="{{url_for('Logout')}}" class="logout">
+					<i class='bx bxs-log-out-circle' ></i>
+					<span class="text">Logout</span>
+				</a>
+			</li>
+		</ul>
+	</section>
+	<!-- SIDEBAR -->
+
+
+
+	<!-- CONTENT -->
+	<section id="content">
+		<!-- NAVBAR -->
+		<nav>
+			<i class='bx bx-menu' ></i>
+			<a href="#" class="nav-link">Categories</a>
+			<form action="#">
+				<div class="form-input">
+					<input type="search" placeholder="Search...">
+					<button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
+				</div>
+			</form>
+			<input type="checkbox" id="switch-mode" hidden>
+			<label for="switch-mode" class="switch-mode"></label>
+			<a href="#" class="notification">
+				<i class='bx bxs-bell' ></i>
+				<span class="num">8</span>
+			</a>
+			<a href="#" class="profile">
+				<img src="img/doctor.png">
+			</a>
+		</nav>
+		<!-- NAVBAR -->
+
+		<!-- MAIN -->
+		<main>
+			<div class="head-title">
+				<div class="left">
+					<h1>Appointment Booking</h1>
+					<ul class="breadcrumb">
+						<li>
+							<a href="#">Dashboard</a>
+						</li>
+						<li><i class='bx bx-chevron-right' ></i></li>
+						<li>
+							<a class="active" href="#">Appointment booking</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		
+
+
+			</div>
+
+			<div class="table-data">
+				<div class="order">
+					<form method="POST" action="/book_appointment" class="mt-3">
+						<div class="form-group">
+							<label for="patient_name">Patient Name:</label>
+							<input type="text" class="form-control" id="patient_name" name="patient_name" required value="{{patient_name}}">
+						</div>
+						
+						<div class="form-group">
+							<label for="speciality">Speciality:</label>
+							<select class="form-control" id="speciality" name="speciality" required>
+								<option value="">Select Speciality</option>
+								{% for speciality in specialities %}
+									<option value="{{ speciality }}">{{ speciality }}</option>
+								{% endfor %}
+							</select>
+						</div>
+						
+						<div class="form-group">
+							<label for="doctor_name">Doctor:</label>
+							<select class="form-control" id="doctor_name" name="doctor_name" required>
+								<option value="">Select Doctor</option>
+								{% for doctor in doctors %}
+									<option value="{{ doctor.doctor_name }}">{{ doctor.doctor_name }}</option>
+								{% endfor %}
+							</select>
+						</div>
+						
+						<div class="form-group">
+							<label for="health_issue">Health Issue</label>
+							<input type="text" class="form-control" id="health_issue" name="health_issue" required>
+						</div>
+						
+
+						<div class="form-group">
+							<label for="datetime">Booking Date and Time:</label>
+							<input type="datetime-local" class="form-control" id="datetime" name="datetime" required>
+						</div>
+						
+						<button type="submit" class="btn btn-primary">Book Appointment</button>
+					</form>
+				</div>
+			</div>
+		</main>
+	</section>
+	<script src="{{ url_for('static', filename='js/admin_dashboard.js') }}"></script>
+	<script>
+		// JavaScript to show/hide the date input field modal
+		const openDateModalButton = document.getElementById('openDateModal');
+		const dateModal = document.getElementById('dateModal');
+		const closeDateModalButton = document.getElementById('closeDateModal');
+	
+		openDateModalButton.addEventListener('click', () => {
+			dateModal.style.display = 'block';
+		});
+	
+		closeDateModalButton.addEventListener('click', () => {
+			dateModal.style.display = 'none';
+		});
+	</script>
+</body>
+</html>
